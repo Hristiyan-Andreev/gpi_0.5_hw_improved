@@ -1,6 +1,9 @@
+import sys
 import time
 from threading import Timer
 import liveapi
+
+sys.path.append('/home/pi/config')
 import config as cf
 
 # Time measurement class
@@ -38,25 +41,27 @@ class GpiStream:
         self.in_cue = stream.in_cue
         
     def start_cue(self, elemental_ip = cf.elemental_ip):
-        if self.channel_locked is not True:
-            response = liveapi.cue_command(elemental_ip, self.stream_id, 'start_cue')
-            self.in_cue = True
-            lock_channel(cf.lock_interval)
-            return response
-        else:
-            return "Channel is locked"
+        #if self.channel_locked is not True:
+        print("3. Starting cue")
+        response = liveapi.cue_command(elemental_ip, self.stream_id, 'start_cue')
+        self.in_cue = True
+        #self.lock_channel(cf.lock_interval)
+        return response
+        #else:
+         #   return "Channel is locked"
         
     def stop_cue(self, elemental_ip = cf.elemental_ip):
-        if self.channel_locked is not True:
-            response = liveapi.cue_command(elemental_ip, self.stream_id, 'stop_cue')
-            self.in_cue = False
-            return response
-        else:
-            return "Channel is locked"
+        #if self.channel_locked is not True:
+        print("3. Stopping cue")
+        response = liveapi.cue_command(elemental_ip, self.stream_id, 'stop_cue')
+        self.in_cue = False
+        return response
+        #else:
+         #   return "Channel is locked"
 
     def lock_channel(self, lock_interval):
         self.channel_locked = True
-        unlock_timer = Timer(lock_interval, unlock_channnel)
+        unlock_timer = Timer(lock_interval, self.unlock_channnel)
         unlock_timer.start()
 
     def unlock_channnel(self):

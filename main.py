@@ -5,7 +5,7 @@ from flask import Flask
 from helpers import TimeMeasure, GpiStream
 
 
-#sys.path.append('/home/pi/config')
+sys.path.append('/home/pi/config')
 import config as cf
 
 
@@ -39,10 +39,8 @@ def start_stop_avail(gpi):
     print("2. Stream is in cue: {}".format(stream.in_cue))
     
     # Rising edge detected and Stream is in Cue => Stop cue
-    if edge and stream.in_cue:  
-        print("3. Stopping cue")
+    if edge and stream.in_cue:        
         reaction_time.start_measure()
-        #resp = liveapi.cue_command(cf.elemental_ip, cf.gpi2stream[gpi], 'stop_cue') # Stop cue
         stream.stop_cue()
         
         reaction_time.end_measure()
@@ -53,10 +51,8 @@ def start_stop_avail(gpi):
         #time.sleep(cf.wait_time)                    # Sleeps the thread for all GPIO inputs - not good
         
     # Falling edge detected and Stream is NOT in Cue => Start cue
-    elif not edge and not stream.in_cue:    
-        print("3. Starting cue")
+    elif not edge and not stream.in_cue:
         reaction_time.start_measure()
-        #resp = liveapi.cue_command(cf.elemental_ip, cf.gpi2stream[gpi], 'start_cue') # Start cue
         stream.start_cue()
         
         reaction_time.end_measure()
